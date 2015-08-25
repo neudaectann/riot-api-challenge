@@ -1,0 +1,17 @@
+{
+  "name": "riot-api-challenge",
+  "version": "0.0.0",
+  "description": "Web application for item sets",
+  "main": "gulpfile.js",
+  "repository": "https://github.com/temurka1/riot-api-challenge-2",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Timur Urazalinov <urazalinov.timur@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-minify-html": "^1.0.4",
+    "browser-sync": "^1.6.5"
+  }
+}
