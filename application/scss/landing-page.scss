@@ -1,7 +1,7 @@
 @import "_mixins.scss";
 
 $bodyBackgroudColor: #e7ecea;
-$bodyColor:          #74777b; 
+$bodyColor:          #74777b;
 $headerSpanColor:    #bdc2c9;
 
 body {
@@ -34,9 +34,8 @@ body {
     }
 }
 
-.logo {
-    width: 350px;
-    height: 260px;
-    border: 2px solid black;
-    border-radius: 100%;
+.landing-page-footer {
+	letter-spacing: -1px;
+	margin: 0 auto;
+	padding-left: 45%;
 }

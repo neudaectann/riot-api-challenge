@@ -1,6 +1,7 @@
 var gulp        = require("gulp"),
     minifyHTML  = require("gulp-minify-html"),
     sass        = require("gulp-ruby-sass"),
+    // imagemin    = require("gulp-imagemin"),
     browserSync = require("browser-sync");
 
 // gulp config - defines paths for html, css, etc.
@@ -17,6 +18,7 @@ var config = {
         },
         sass:{
             src: "application/scss/",
+            srcWatch: "application/scss/*.scss",
             dest: "build/css/"
         },
         js:{
@@ -24,13 +26,13 @@ var config = {
             dest: "build/js/"
         },
         img:{
-            src: "application/img/**/*.png",
+            src: "application/img/**/*",
             dest: "build/img/"
         }
     }
 }
 
-// gulp task for sass compile
+// task for sass compile
 // gulp-ruby-sass: 1.x
 //
 gulp.task("sass", function(){
@@ -57,17 +59,17 @@ gulp.task("html", function() {
 });
 
 // copy bower dependencies to build output folder
-// TODO: copy only changed files
 //
 gulp.task("bower-copy", function() {
     return gulp.src(config.paths.bower.src).pipe(gulp.dest(config.paths.bower.dest));
 });
 
-// copy images
-// TODO: gzip it!
+// compress images
 //
 gulp.task("img-compress", function() {
-    return gulp.src(config.paths.img.src).pipe(gulp.dest(config.paths.img.dest));
+    return gulp.src(config.paths.img.src)
+                //.pipe(imagemin())
+                .pipe(gulp.dest(config.paths.img.dest));
 });
 
 // BrowserSync task for livereload functionality
@@ -82,13 +84,14 @@ gulp.task("browser-sync", function() {
 
 // build task - compile sass, minify html/javascript, copy bower dependencies
 //
-gulp.task("build", ["sass", "html", "bower-copy", "img-compress"]);
+gulp.task("build", ["sass", "html", "img-compress"]);
 
 // serve task - runs loval server environment
 //
 gulp.task("serve", ["build", "browser-sync"], function() {
+    gulp.watch(config.paths.bower.src, ["bower_copy"]);
     gulp.watch(config.paths.html.src, ["html", browserSync.reload]);
-    // gulp.watch(config.paths.sass.src, ["sass", browserSync.reload]);
+    gulp.watch(config.paths.sass.srcWatch, ["sass", browserSync.reload]);
 });
 
 // TODO: deploy task - copy all files from ./build to remote server via ssh
