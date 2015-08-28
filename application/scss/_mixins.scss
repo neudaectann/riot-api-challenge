@@ -1,8 +1,0 @@
-// simple circle mixin
-//
-@mixin circle($width, $color) {
-      width: $width;
-      height: $width;
-      background: $color;
-      border-radius: $width/3;
-}
