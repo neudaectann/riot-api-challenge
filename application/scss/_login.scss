@@ -1,13 +1,6 @@
 // Styles for login and signup buttons
 
-$menuColor:                 #566473;
-$bodyColor:                 #ecf0f1;
-
-$loginButtonColor:          #2bdc33;
-$loginButtonHoverColor:     #23b32a;
-
-$signupButtonColor:         #ff5747;
-$signupButtonHoverColor:    #cb4539;
+@import "_colors";
 
 .button {
     float: left;
@@ -54,7 +47,6 @@ $signupButtonHoverColor:    #cb4539;
 .button-login, .button-signup {
     &:hover {
         color: #fff;
-        //border:3px solid $loginButtonHoverColor;
     }
 
     &:hover::before, &:hover::after {
