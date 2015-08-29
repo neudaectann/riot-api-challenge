@@ -4,48 +4,82 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>DRAAAVO!</title>
         <meta name="description" content="DRAAAVO: Small application for item set generation"/>
         <meta name="keywords" content="item sets, riot api challenge, smart item set generation"/>
         <meta name="author" content="Ready for Summer(EUW), NeudAectann(EUW)"/>
 
         <link rel="stylesheet" type="text/css" href="css/main-page.css"/>
+
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-route/angular-route.min.js"></script>
+        <script src="bower_components/angular-scroll/angular-scroll.min.js"></script>
+
+        <script src="js/main-page.js"></script>
+
+        <title>DRAAAVO!</title>    
     </head>
 
-    <body>
-        <div class="container">
+    <body ng-app="draaavoApp">
+        <div class="container" ng-controller="MainController">
 			<header>
+                <!-- title -->
 				<h1>DRAAAVO!<span>Draaavo does it all ... with style.</span></h1>
-                <!-- Navigation menu -->
-                <section class="color-8">
+
+                <!-- login/signup -->
+                <div class="login-signup">
+                    <img src = "img/logo.png"/>
+
+                    <div id = "login-controls">
+                        <p>Helpfull smart item sets for ARAM.<p>
+
+                        <button class="button button-login" ng-click="changeView('/login')">Login</button>
+                        <button class="button button-signup"ng-click="changeView('/signup')">Signup</button>
+                    </div>
+                </div>
+                
+                <!-- navigation menu -->
+                <div class="color-8">
                     <nav class="cl-effect-7">
-                        <a href="#">Why DRAAAVO?</a>
-                        <a href="#">Features</a>
-                        <a href="#">Terms of Use</a>
-                        <a href="#">Presentation</a>
-                        <a href="#">About</a>
+                        <a href="#whydraaavo"    du-smooth-scroll du-scrollspy>Why DRAAAVO?</a>
+                        <a href="#features"      du-smooth-scroll du-scrollspy>Features</a>
+                        <a href="#terms-of-use"  du-smooth-scroll du-scrollspy>Terms of Use</a>
+                        <a href="#presentation"  du-smooth-scroll du-scrollspy>Presentation</a>
+                        <a href="#about-authors" du-smooth-scroll du-scrollspy>About Authors</a>
                     </nav>
-                </section>
-                <img src = "img/logo.png"/>
-			</header>
+                </div>
+            </header>
 
-
-            <section class="content">
-                <p>Signup or Login into existing account to begin using DRAAAVO.<p>
-                <div class="login">
-                    <button class="button button-login">Login</button>
-                    <button class="button button-signup">Signup</button>
+            <!-- why DRAAAVO, why? -->
+            <section id="whydraaavo">
+                <div>
+                    <h2>Why DRAAAVO!?</h2>
                 </div>
             </section>
-        </div>
 
-            <!-- <section class = "copyrights">
-                <p>Created with love by</p>
-                <p>
-                    <a href="http://www.lolking.net/summoner/euw/27004391">Ready for Summer</a>
-                    <a href="http://www.lolking.net/summoner/euw/21678886">NeudAectann</a>
-                </p>
-            </section> -->
+            <!-- features -->
+            <section id="features">
+                <h2>Features</h2>
+            </section>
+
+            <!-- terms of use -->
+            <section id="terms-of-use">
+                <h2>Terms of use</h2>
+            </section>
+
+            <!-- presentation -->
+            <section id="presentation">
+                <h2>Presentation</h2>
+            </section>
+
+            <!-- about authors -->
+            <section id="about-authors">
+                <h2>Authors</h2>
+            </section>
+
+            <!-- footer with back to top button -->
+            <footer>
+                <button ng-click="toTheTop()">Take me back!</button>
+            </footer>
         </div>
     </body>
 </html>

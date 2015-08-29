@@ -88,14 +88,14 @@ gulp.task("browser-sync", function() {
 })
 
 // build task - compile sass, minify html/javascript, compress images copy bower dependencies
-gulp.task("build", ["sass", "js-min", "html", "img-compress", "bower-copy"]);
+gulp.task("build", ["js-min", "html", "img-compress", "sass"]);
 
 // serve task - runs loval server environment
 gulp.task("serve", ["build", "browser-sync"], function() {
     gulp.watch(config.paths.html.src, ["html", browserSync.reload]);
     gulp.watch(config.paths.sass.srcWatch, ["sass", browserSync.reload]);
-    gulp.watch(config.paths.js.srcWatch, ["js", browserSync.reload]);
-    gulp.watch(config.paths.img.srcWatch, ["img-compress", browserSync.reload]);
+    gulp.watch(config.paths.js.src, ["js-min", browserSync.reload]);
+    gulp.watch(config.paths.img.src, ["img-compress", browserSync.reload]);
 });
 
 // TODO: deploy task - copy all files from ./build to remote server via ssh

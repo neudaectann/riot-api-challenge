@@ -2,13 +2,15 @@
 
 @import "_colors";
 
-.button {
-    float: left;
+.button 
+{
+    //float: center;
+    position: relative;
 	min-width: 150px;
 	max-width: 250px;
-	display: block;
-	margin: 1em;
-	padding: 1em 2em;
+	//display: block;
+	margin: 1em auto;
+	padding: 1.3em 2em;
 	border: 3px solid $menuColor;
 	background: $bodyColor;
 	color: $bodyColor;
@@ -18,20 +20,26 @@
 	-webkit-backface-visibility: hidden;
 	-moz-osx-font-smoothing: grayscale;
 }
-.button:focus {
+
+.button:focus 
+{
 	outline: none;
 }
-.button > span {
+
+.button > span 
+{
 	vertical-align: middle;
 }
 
-.button.button-login, .button.button-signup {
+.button.button-login, .button.button-signup 
+{
     background: #fff;
 	color: $menuColor;
 	overflow: hidden;
 	transition: color 0.3s;
 
-    &::before, &::after {
+    &::before, &::after 
+    {
         content: '';
     	position: absolute;
     	height: 100%;
@@ -44,36 +52,46 @@
     }
 }
 
-.button-login, .button-signup {
-    &:hover {
+.button-login, .button-signup 
+{
+    &:hover 
+    {
         color: #fff;
     }
 
-    &:hover::before, &:hover::after {
+    &:hover::before, &:hover::after 
+    {
         transform: translate3d(0, 100%, 0);
     }
 
-    &:hover::after {
+    &:hover::after 
+    {
         transition-delay: 0.175s;
     }
 }
 
-.button-login {
-    &::before {
+.button-login 
+{
+    &::before 
+    {
         background: $loginButtonColor;
     }
 
-    &::after {
+    &::after 
+    {
         background: $loginButtonHoverColor;
     }
 }
 
- .button-signup {
-     &::before {
+ .button-signup 
+ {
+     &::before 
+     {
          background: $signupButtonColor;
      }
 
-     &::after {
+     &::after 
+     {
          background: $signupButtonHoverColor;
      }
  }
