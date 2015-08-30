@@ -1,4 +1,4 @@
-var app = angular.module('draaavoApp', ['ngRoute', 'duScroll']);
+var app = angular.module('draaavoApp', ['ngRoute', 'duScroll', 'sticky']);
 
 app.config(['$routeProvider', function($routeProvider) {
 	$routeProvider
@@ -42,4 +42,3 @@ app.controller('AuthController', ['$scope', function($scope) {
 		$scope.error_message = 'Got axes, need victims.';
 	};
 }]);
-

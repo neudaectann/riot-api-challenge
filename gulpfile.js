@@ -85,10 +85,13 @@ gulp.task("browser-sync", function() {
             baseDir: "./build"
         }
     })
-})
+});
 
 // build task - compile sass, minify html/javascript, compress images copy bower dependencies
 gulp.task("build", ["js-min", "html", "img-compress", "sass"]);
+
+// rebuild task - with bower-copy
+gulp.task("rebuild", ["bower-copy", "js-min", "html", "img-compress", "sass"]);
 
 // serve task - runs loval server environment
 gulp.task("serve", ["build", "browser-sync"], function() {

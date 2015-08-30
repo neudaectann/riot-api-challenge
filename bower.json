@@ -24,5 +24,11 @@
   ],
   "resolutions": {
     "angular": "~1.4.5"
+  },
+  "dependencies": {
+    "angular": "~1.4.5",
+    "angular-route": "~1.4.5",
+    "angular-scroll": "~0.7.2",
+    "ngSticky": "~1.7.9"
   }
 }
