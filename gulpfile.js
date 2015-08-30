@@ -4,101 +4,151 @@ var gulp        = require("gulp"),
     plumber     = require("gulp-plumber"),
     uglify      = require("gulp-uglify"),
     prefix      = require("gulp-autoprefixer"),
-    // imagemin    = require("gulp-imagemin"),
+    imagemin    = require("gulp-imagemin"),
+    bowerFiles	= require("main-bower-files"),
     browserSync = require("browser-sync");
 
 // gulp config - defines paths for html, css, etc.
 var config = {
-    paths:{
+    paths: {
         html:{
             src: "application/**/*.html",
-            dest: "build/"
+            destDev: "build/dev/",
+            destProd: "build/prod/"
         },
         bower:{
             src: "bower_components/**/*.*",
-            dest: "build/bower_components/"
+            destDev: "build/dev/bower_components/",
+            destProd: "build/prod/bower_components/"
         },
         sass:{
             src: "application/scss/",
             srcWatch: "application/scss/*.scss",
-            dest: "build/css/"
+            destDev: "build/dev/css/",
+            destProd: "build/prod/css/"
         },
         js:{
             src: "application/js/*.js",
-            dest: "build/js/"
+            destDev: "build/dev/js/",
+            destProd: "build/prod/js/"
         },
         img:{
             src: "application/img/*.*",
-            dest: "build/img/"
+            destDev: "build/dev/img/",
+            destProd: "build/prod/img/"
         }
     }
 }
 
-// task for sass compile
-// gulp-ruby-sass: 1.x
-gulp.task("sass", function() {
+// ----------------------------------------------------------------------------------------------------------------------------
+// gulp tasks for development
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// sass
+gulp.task("sass-dev", function() {
     return sass(config.paths.sass.src, {
-                    style: "compressed",
+                    style: "expanded",
                     emitCompileError: true
                 })
                 .pipe(plumber())
                 .pipe(prefix("last 2 versions"))
-                .pipe(gulp.dest(config.paths.sass.dest))
+                .pipe(gulp.dest(config.paths.sass.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task("js-min", function() {
+// java script
+gulp.task("js-dev", function() {
     return gulp.src(config.paths.js.src)
-                .pipe(plumber())
-                .pipe(uglify())
-                .pipe(gulp.dest(config.paths.js.dest))
+                .pipe(gulp.dest(config.paths.js.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
 
-// Minify HTML task.
-// It get all .html files from application directory and store them into build directory after minification
-gulp.task("html", function() {
+// html
+gulp.task("html-dev", function() {
     return gulp.src(config.paths.html.src)
-                .pipe(plumber())
-                .pipe(minifyHTML())
-                .pipe(gulp.dest(config.paths.html.dest))
+                .pipe(gulp.dest(config.paths.html.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
 
-// copy bower dependencies to build output folder
-gulp.task("bower-copy", function() {
-    return gulp.src(config.paths.bower.src).pipe(gulp.dest(config.paths.bower.dest));
+// bower
+gulp.task("bower-dev", function() {
+	return gulp.src(bowerFiles(), { base: "bower_components/"})
+    			.pipe(gulp.dest(config.paths.bower.destDev));
 });
 
-// compress images
-gulp.task("img-compress", function() {
+// images
+gulp.task("img-dev", function() {
     return gulp.src(config.paths.img.src)
-                // .pipe(imagemin())
-                .pipe(gulp.dest(config.paths.img.dest))
+                .pipe(gulp.dest(config.paths.img.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
 
-// BrowserSync task for livereload functionality
+// browser sync
 gulp.task("browser-sync", function() {
     browserSync({
         server: {
-            baseDir: "./build"
+            baseDir: "./build/dev"
         }
     })
 });
 
-// build task - compile sass, minify html/javascript, compress images copy bower dependencies
-gulp.task("build", ["js-min", "html", "img-compress", "sass"]);
+// ----------------------------------------------------------------------------------------------------------------------------
+// gulp tasks for production
+// ----------------------------------------------------------------------------------------------------------------------------
 
-// rebuild task - with bower-copy
-gulp.task("rebuild", ["bower-copy", "js-min", "html", "img-compress", "sass"]);
-
-// serve task - runs loval server environment
-gulp.task("serve", ["build", "browser-sync"], function() {
-    gulp.watch(config.paths.html.src, ["html", browserSync.reload]);
-    gulp.watch(config.paths.sass.srcWatch, ["sass", browserSync.reload]);
-    gulp.watch(config.paths.js.src, ["js-min", browserSync.reload]);
-    gulp.watch(config.paths.img.src, ["img-compress", browserSync.reload]);
+// sass
+gulp.task("sass-prod", function() {
+    return sass(config.paths.sass.src, {
+                    style: "compressed",
+                })
+                .pipe(plumber())
+                .pipe(prefix("last 2 versions"))
+                .pipe(gulp.dest(config.paths.sass.destProd));
 });
 
-// TODO: deploy task - copy all files from ./build to remote server via ssh
+// java script
+gulp.task("js-prod", function() {
+    return gulp.src(config.paths.js.src)
+                .pipe(uglify())
+                .pipe(gulp.dest(config.paths.js.destProd));
+});
+
+// html
+gulp.task("html-prod", function() {
+    return gulp.src(config.paths.html.src)
+                .pipe(minifyHTML())
+                .pipe(gulp.dest(config.paths.html.destProd));
+});
+
+// bower
+gulp.task("bower-prod", function() {
+    //return gulp.src(config.paths.bower.src).pipe(gulp.dest(config.paths.bower.destProd));
+    return gulp.src(bowerFiles(), { base: "bower_components/"})
+    			.pipe(uglify())
+    			.pipe(gulp.dest(config.paths.bower.destProd));
+});
+
+// images
+gulp.task("img-prod", function() {
+    return gulp.src(config.paths.img.src)
+                .pipe(imagemin())
+                .pipe(gulp.dest(config.paths.img.destProd));
+});
+
+// ----------------------------------------------------------------------------------------------------------------------------
+// serve, build-dev, build-prod tasks
+// ----------------------------------------------------------------------------------------------------------------------------
+
+// dev build task - compile sass, copy html/javascript, copy images, copy bower dependencies
+gulp.task("build-dev", ["bower-dev", "js-dev", "html-dev", "img-dev", "sass-dev"]);
+
+// production build
+gulp.task("build-prod", ["bower-prod", "js-prod", "html-prod", "img-prod", "sass-prod"]);
+
+// serve task - runs loval server environment
+gulp.task("serve", ["build-dev", "browser-sync"], function() {
+    gulp.watch(config.paths.html.src, ["html-dev", browserSync.reload]);
+    gulp.watch(config.paths.sass.srcWatch, ["sass-dev", browserSync.reload]);
+    gulp.watch(config.paths.js.src, ["js-copy-dev", browserSync.reload]);
+    gulp.watch(config.paths.img.src, ["img-copy-dev", browserSync.reload]);
+});
