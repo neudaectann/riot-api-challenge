@@ -6,7 +6,11 @@ var gulp        = require("gulp"),
     prefix      = require("gulp-autoprefixer"),
     imagemin    = require("gulp-imagemin"),
     bowerFiles	= require("main-bower-files"),
-    browserSync = require("browser-sync");
+    browserSync = require("browser-sync"),
+    size        = require('gulp-size'),
+    jshint      = require('gulp-jshint'),
+    stylish     = require('jshint-stylish'),
+    gulpIgnore  = require('gulp-ignore');
 
 // gulp config - defines paths for html, css, etc.
 var config = {
@@ -48,17 +52,28 @@ var config = {
 gulp.task("sass-dev", function() {
     return sass(config.paths.sass.src, {
                     style: "expanded",
-                    emitCompileError: true
                 })
                 .pipe(plumber())
                 .pipe(prefix("last 2 versions"))
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.sass.destDev))
                 .pipe(browserSync.reload({stream: true}));
+});
+
+gulp.task("js-hint-dev", function() {
+    return gulp.src(config.paths.js.src)
+                .pipe(gulpIgnore.exclude(/snap.svg-min\.js/))
+                .pipe(gulpIgnore.exclude(/modernizr.custom\.js/))
+                .pipe(gulpIgnore.exclude(/presentation\.js/))
+                .pipe(jshint())
+                .pipe(jshint.reporter(stylish));
 });
 
 // java script
 gulp.task("js-dev", function() {
     return gulp.src(config.paths.js.src)
+                .pipe(plumber())
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.js.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
@@ -66,6 +81,7 @@ gulp.task("js-dev", function() {
 // html
 gulp.task("html-dev", function() {
     return gulp.src(config.paths.html.src)
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.html.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
@@ -73,12 +89,14 @@ gulp.task("html-dev", function() {
 // bower
 gulp.task("bower-dev", function() {
 	return gulp.src(bowerFiles(), { base: "bower_components/"})
+                .pipe(size({showFiles: true}))
     			.pipe(gulp.dest(config.paths.bower.destDev));
 });
 
 // images
 gulp.task("img-dev", function() {
     return gulp.src(config.paths.img.src)
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.img.destDev))
                 .pipe(browserSync.reload({stream: true}));
 });
@@ -103,6 +121,7 @@ gulp.task("sass-prod", function() {
                 })
                 .pipe(plumber())
                 .pipe(prefix("last 2 versions"))
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.sass.destProd));
 });
 
@@ -110,6 +129,7 @@ gulp.task("sass-prod", function() {
 gulp.task("js-prod", function() {
     return gulp.src(config.paths.js.src)
                 .pipe(uglify())
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.js.destProd));
 });
 
@@ -117,6 +137,7 @@ gulp.task("js-prod", function() {
 gulp.task("html-prod", function() {
     return gulp.src(config.paths.html.src)
                 .pipe(minifyHTML())
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.html.destProd));
 });
 
@@ -125,6 +146,7 @@ gulp.task("bower-prod", function() {
     //return gulp.src(config.paths.bower.src).pipe(gulp.dest(config.paths.bower.destProd));
     return gulp.src(bowerFiles(), { base: "bower_components/"})
     			.pipe(uglify())
+                .pipe(size({pretty: true}))
     			.pipe(gulp.dest(config.paths.bower.destProd));
 });
 
@@ -132,6 +154,7 @@ gulp.task("bower-prod", function() {
 gulp.task("img-prod", function() {
     return gulp.src(config.paths.img.src)
                 .pipe(imagemin())
+                .pipe(size({showFiles: true}))
                 .pipe(gulp.dest(config.paths.img.destProd));
 });
 
@@ -140,13 +163,13 @@ gulp.task("img-prod", function() {
 // ----------------------------------------------------------------------------------------------------------------------------
 
 // dev build task - compile sass, copy html/javascript, copy images, copy bower dependencies
-gulp.task("build-dev", ["bower-dev", "js-dev", "html-dev", "img-dev", "sass-dev"]);
+gulp.task("build:dev", ["bower-dev", "js-hint-dev", "js-dev", "html-dev", "img-dev", "sass-dev"]);
 
 // production build
-gulp.task("build-prod", ["bower-prod", "js-prod", "html-prod", "img-prod", "sass-prod"]);
+gulp.task("build:prod", ["bower-prod", "js-prod", "html-prod", "img-prod", "sass-prod"]);
 
 // serve task - runs loval server environment
-gulp.task("serve", ["build-dev", "browser-sync"], function() {
+gulp.task("serve", ["build:dev", "browser-sync"], function() {
     gulp.watch(config.paths.html.src, ["html-dev", browserSync.reload]);
     gulp.watch(config.paths.sass.srcWatch, ["sass-dev", browserSync.reload]);
     gulp.watch(config.paths.js.src, ["js-copy-dev", browserSync.reload]);
