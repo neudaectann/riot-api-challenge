@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="DRAAAVO: Small application for item set generation"/>
+        <meta name="keywords" content="item sets, riot api challenge, smart item set generation"/>
+        <meta name="author" content="Ready for Summer(EUW), NeudAectann(EUW)"/>
+
+        <script src="bower_components/angularfire/dist/angularfire.js"></script>
+        <script src="bower_components/firebase/firebase.js"></script>
+
+        <script src="js/draaavoApp/controllers.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="css/application.css"/>
+
+        <title>DRAAAVO!</title>
+	</head>
+
+	<body ng-controller="ApplicationController">
+		<div class="container">
+            <div>
+                <img src="img/logo2.png"/>
+            <div>
+            <h1>This is where Draaavo shines!</h1>
+
+            <section class="summoner">
+                <span class="input input--haruki">
+                    <label class="input__label input__label--haruki" for="input-1">
+                        <span class="input__label-content input__label-content--haruki">Summoner Name</span>
+                    </label>
+                    <input class="input__field input__field--haruki" type="text" id="input-1" ng-model="summonerName"/>
+                </span>
+
+                <span>Server</span>
+                <select class="cs-select cs-skin-underline" ng-model="server">
+                    <option value="" disabled selected>Server</option>
+                    <option value="1">Europe West</option>
+                    <option value="2">Europe Nordic and East</option>
+                    <option value="3">North America</option>
+                    <option value="4">Russia</option>
+                </select>
+            </section>
+
+            <div class="search">
+                <button ng-click="generateItemSet()">Search match</button>
+            </div>
+		</div>
+	</body>
+</html>
+

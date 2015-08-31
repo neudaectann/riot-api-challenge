@@ -32,7 +32,7 @@ var config = {
             destProd: "build/prod/css/"
         },
         js:{
-            src: "application/js/*.js",
+            src: "application/js/**/*.js",
             destDev: "build/dev/js/",
             destProd: "build/prod/js/"
         },
@@ -172,6 +172,6 @@ gulp.task("build:prod", ["bower-prod", "js-prod", "html-prod", "img-prod", "sass
 gulp.task("serve", ["build:dev", "browser-sync"], function() {
     gulp.watch(config.paths.html.src, ["html-dev", browserSync.reload]);
     gulp.watch(config.paths.sass.srcWatch, ["sass-dev", browserSync.reload]);
-    gulp.watch(config.paths.js.src, ["js-copy-dev", browserSync.reload]);
-    gulp.watch(config.paths.img.src, ["img-copy-dev", browserSync.reload]);
+    gulp.watch(config.paths.js.src, ["js-dev", browserSync.reload]);
+    gulp.watch(config.paths.img.src, ["img-dev", browserSync.reload]);
 });

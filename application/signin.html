@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+   	</head>
+
+   	<body ng-controller="AuthController">
+   		<div class="container">
+      		<div>
+        		<h2>AngularJS and Firebase App!</h2>
+      		</div>
+      		
+      		<form role="form">
+        		<div>	
+	        		<label>Email</label>
+	        		<input type="email" name="email" ng-model="email">
+	    		</div> 
+    			
+    			<div>
+        			<label>Password</label>
+        			<input type="password" name="password" ng-model="password" ng-minlength="3">
+    			</div>  
+        		
+        		<label class="checkbox">
+          			<a href="#/signup">Sign Up</a>
+        		</label>
+
+        		<button type="button" ng-click="login()">SignIn</button>
+      		</form>
+      	</div>
+   	</body>
+</html>
